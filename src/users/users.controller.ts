@@ -40,15 +40,18 @@ export class UsersController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   login(@Request() req) {
-    return { user: req.user, msg: 'Logged in' };
-  }
+  console.log('Авторизованный пользователь:', req.user);
+  return { user: req.user, msg: 'Logged in' };
+}
 
   @ApiOkResponse({ type: LoginCheckResponse })
   @Get('/login-check')
   @UseGuards(AuthenticatedGuard)
   loginCheck(@Request() req) {
-    return req.user;
+  console.log('Проверка логина, пользователь:', req.user);
+  return req.user;
   }
+
 
   @ApiOkResponse({ type: LogoutUserResponse })
   @Get('/logout')
