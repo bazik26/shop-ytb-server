@@ -40,9 +40,10 @@ export class UsersController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   login(@Request() req) {
-    console.log('✅ Логин успешен, req.session:', req.session)
-    return { user: req.user, msg: 'Logged in' };
+    console.log('✅ Логин успешен, req.user:', req.user);
+    return { user: { userId: req.user.id, username: req.user.username, email: req.user.email }, msg: 'Logged in' };
   }
+  
   @Get('/login-check')
   @UseGuards(AuthenticatedGuard)
   loginCheck(@Request() req) {
