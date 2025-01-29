@@ -15,7 +15,8 @@ async function bootstrap() {
       cookie: {
         secure: process.env.NODE_ENV === 'production', // true на проде
         httpOnly: true,
-        sameSite: 'none', // важный параметр для Render
+        sameSite: 'none', // важно для Render
+        maxAge: 24 * 60 * 60 * 1000, // 1 день
       },
     })
   );
