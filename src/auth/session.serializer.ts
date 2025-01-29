@@ -10,23 +10,21 @@ export class SessionSerializer extends PassportSerializer {
 
   serializeUser(user: any, done: (err: Error | null, user?: any) => void) {
     console.log('✅ Сериализация пользователя:', user);
-    if (!user || !user.userId) {
-      console.error('❌ Ошибка: userId отсутствует в объекте пользователя!', user);
-    }
-    done(null, user.userId);
+    done(null, user.userId); // Теперь передаём только userId
   }
 
   async deserializeUser(userId: number, done: (err: Error | null, user?: any) => void) {
     console.log('🔄 Десериализация пользователя по userId:', userId);
-  
-    const user = await this.usersService.findOne({ where: { id: Number(userId) } }); // 👈 Преобразуем в число
-  
+
+    const user = await this.usersService.findOne({ where: { id: userId } });
+
     if (!user) {
       console.error('❌ Ошибка: пользователь не найден!', userId);
       return done(null, false);
     }
-  
+
     console.log('✅ Десериализованный пользователь:', user);
     done(null, user);
   }
 }
+

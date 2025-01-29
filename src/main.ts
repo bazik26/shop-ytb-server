@@ -10,16 +10,16 @@ async function bootstrap() {
   app.use(
     session({
       secret: process.env.SESSION_SECRET || 'keyword',
-      resave: false,
-      saveUninitialized: false,
+      resave: false, // Оставляем false, чтобы не пересохранять сессию при каждом запросе
+      saveUninitialized: false, // Оставляем false, чтобы не создавать пустые сессии
       cookie: {
-        secure: process.env.NODE_ENV === 'production', // true на проде
-        httpOnly: true,
-        sameSite: 'none', // важно для Render
-        maxAge: 24 * 60 * 60 * 1000, // 1 день
+        secure: process.env.NODE_ENV === 'production' ? true : false, // На проде true, локально false
+        httpOnly: true, // Доступен только серверу, защита от XSS-атак
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' для Render, 'lax' локально
+        maxAge: 24 * 60 * 60 * 1000, // Время жизни куки (1 день)
       },
     })
-  );
+  );  
   app.use(passport.initialize());
   app.use(passport.session());
 
