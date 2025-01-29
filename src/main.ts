@@ -9,11 +9,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(
     session({
-      secret: 'keyword',
-      resave: true, // было false
-      saveUninitialized: true, // было false
-      cookie: { secure: false, httpOnly: true },
-    }),
+      secret: 'keyword',   // Должно быть уникальным и защищенным
+      resave: false,       // Уменьшает нагрузку на базу данных
+      saveUninitialized: false, // Не создаем пустые сессии
+      cookie: {
+        secure: process.env.NODE_ENV === 'production', // true только для HTTPS
+        httpOnly: true,   // Защита от XSS-атак
+        maxAge: 24 * 60 * 60 * 1000, // 1 день
+      },
+    })
   );
   app.use(passport.initialize());
   app.use(passport.session());
