@@ -13,7 +13,8 @@ async function bootstrap() {
       resave: false,       // Уменьшает нагрузку на базу данных
       saveUninitialized: false, // Не создаем пустые сессии
       cookie: {
-        secure: process.env.NODE_ENV === 'production', // true только для HTTPS
+        secure: true,
+        // secure: process.env.NODE_ENV === 'production', // true только для HTTPS
         httpOnly: true,   // Защита от XSS-атак
         maxAge: 24 * 60 * 60 * 1000, // 1 день
       },
