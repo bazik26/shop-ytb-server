@@ -10,8 +10,9 @@ async function bootstrap() {
   app.use(
     session({
       secret: 'keyword',
-      resave: false,
-      saveUninitialized: false,
+      resave: true, // было false
+      saveUninitialized: true, // было false
+      cookie: { secure: false, httpOnly: true },
     }),
   );
   app.use(passport.initialize());
