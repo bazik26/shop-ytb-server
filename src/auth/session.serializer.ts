@@ -1,21 +1,35 @@
-import { Injectable } from '@nestjs/common'
-import { PassportSerializer } from '@nestjs/passport'
+import { Injectable } from '@nestjs/common';
+import { PassportSerializer } from '@nestjs/passport';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class SessionSerializer extends PassportSerializer {
-  serializeUser(user: any, done: (err: Error | null, user?: any) => void) {
-    console.log('✅ Сериализация пользователя:', user)
-    if (!user || !user.userId) {
-      console.error('❌ Ошибка: userId отсутствует в объекте пользователя!', user)
-    }
-    done(null, { userId: user.userId, username: user.username, email: user.email })
+  constructor(private readonly usersService: UsersService) {
+    super();
   }
 
-  deserializeUser(payload: any, done: (err: Error | null, user?: any) => void) {
-    console.log('✅ Десериализация пользователя:', payload)
-    if (!payload || !payload.userId) {
-      console.error('❌ Ошибка: userId отсутствует при десериализации!', payload)
+  serializeUser(user: any, done: (err: Error | null, user?: any) => void) {
+    console.log('✅ Сериализация пользователя:', user);
+    if (!user || !user.userId) {
+      console.error('❌ Ошибка: userId отсутствует в объекте пользователя!', user);
     }
-    done(null, payload)
+    done(null, user.userId); // Сохраняем только userId в сессию
+  }
+
+  async deserializeUser(userId: number, done: (err: Error | null, user?: any) => void) {
+    console.log('🔄 Десериализация пользователя по userId:', userId);
+    
+    try {
+      const user = await this.usersService.findById(userId);
+      if (!user) {
+        console.error('❌ Ошибка: Пользователь не найден при десериализации!', userId);
+        return done(null, null);
+      }
+      console.log('✅ Десериализованный пользователь:', user);
+      done(null, user);
+    } catch (error) {
+      console.error('❌ Ошибка при десериализации пользователя:', error);
+      done(error);
+    }
   }
 }
