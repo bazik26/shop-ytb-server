@@ -42,13 +42,13 @@ export class UsersController {
   login(@Request() req) {
   console.log('Авторизованный пользователь:', req.user);
   return { user: req.user, msg: 'Logged in' };
-}
+  }
 
-  @ApiOkResponse({ type: LoginCheckResponse })
   @Get('/login-check')
   @UseGuards(AuthenticatedGuard)
   loginCheck(@Request() req) {
-  console.log('Проверка логина, пользователь:', req.user);
+  console.log('Проверка логина, req.user:', req.user);
+  console.log('Сессия:', req.session);
   return req.user;
   }
 
