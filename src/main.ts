@@ -1,5 +1,6 @@
 import * as session from 'express-session';
 import * as passport from 'passport';
+import * as express from 'express'
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder } from '@nestjs/swagger';
@@ -7,6 +8,13 @@ import { SwaggerModule } from '@nestjs/swagger/dist';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Получаем Express-приложение из NestJS
+  const expressApp: express.Express = app.getHttpAdapter().getInstance()
+
+  // Доверяем прокси (для работы cookie и session на Render)
+  expressApp.set('trust proxy', 1)
+  
   app.use(
     session({
       secret: process.env.SESSION_SECRET || 'keyword',
@@ -25,7 +33,7 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: ['http://localhost:3001', 'https://shop-ytb-client.onrender.com'],
+    origin: ['http://localhost:3002', 'https://shop-ytb-client.onrender.com'],
   });
 
   const config = new DocumentBuilder()
