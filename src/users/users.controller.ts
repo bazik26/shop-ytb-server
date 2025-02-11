@@ -44,13 +44,23 @@ export class UsersController {
     return { user: { userId: req.user.id, username: req.user.username, email: req.user.email }, msg: 'Logged in' };
   }
   
+  // @Get('/login-check')
+  // @UseGuards(AuthenticatedGuard)
+  // loginCheck(@Request() req) {
+  // console.log('🔵 Проверка логина');
+  // console.log('🔵 req.user:', req.user);
+  // console.log('🔵 req.session:', req.session);
+  // return req.user;
+  // }
+
   @Get('/login-check')
-  @UseGuards(AuthenticatedGuard)
+  // @UseGuards(AuthenticatedGuard)  <-- Убираем проверку
   loginCheck(@Request() req) {
   console.log('🔵 Проверка логина');
   console.log('🔵 req.user:', req.user);
   console.log('🔵 req.session:', req.session);
-  return req.user;
+  // Если пользователь не авторизован, вернуть объект гостя
+  return req.user || { guest: true };
   }
 
 
