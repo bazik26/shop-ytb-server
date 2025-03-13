@@ -49,7 +49,7 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: ['http://localhost:3001', 'https://cars-euro.com'],
+    origin: ['http://localhost:3001', 'http://localhost:3002', 'https://cars-euro.com', 'https://tlttrans.ru'],
   });
 
   const config = new DocumentBuilder()
